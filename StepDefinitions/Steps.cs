@@ -3,6 +3,8 @@ using ShoppingCart.Model;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using ShoppingCartTest.Model;
+using BrowserStack;
+using OpenQA.Selenium;
 
 namespace ShoppingCartTest.StepDefinitions
 {
@@ -12,17 +14,20 @@ namespace ShoppingCartTest.StepDefinitions
         private Setting _driver;
         StorePage _storePage;
         CartPage _cartPage;
-
+        readonly BrowserStackDriver _bsDriver;
+        private IWebDriver webDriver;
         public Steps(Setting driver)
         {
             _driver = driver;
             _storePage = new StorePage(_driver.Driver);
             _cartPage = new CartPage(_driver.Driver);
+            _bsDriver = (BrowserStackDriver)ScenarioContext.Current["bsDriver"];
         }
 
         [Given(@"The user is on the store page")]
         public void GivenTheUserIsOnTheStorePage()
         {
+            webDriver = _bsDriver.Init();
             _driver.Driver.Navigate().GoToUrl(url);
         }
 
